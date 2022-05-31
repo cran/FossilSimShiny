@@ -1,0 +1,206 @@
+/* Palettes/Theme, this is where they are defined */
+:root,
+
+:root.git-light {
+	--dark-color1 : #24292f;
+	--dark-color2 : #ffffff;
+	--medium-color : #ececed;
+
+	--bright-textcolor : #0b0c0e;
+	--tame-textcolor : #3d4147;
+	--medium-textcolor : #0969da;	
+}
+
+:root.git-dark {
+	--dark-color1 : #161b22;
+	--dark-color2 : #0d1117;
+	--medium-color : #28303b;
+	
+	--bright-textcolor : #c9d1d9;
+	--tame-textcolor : #8b949e;
+	--medium-textcolor : #8b949e;
+
+}
+
+:root.classic {
+	--dark-color1 : #392c31;
+	--dark-color2 : #4a3c4a;
+	--medium-color : #5a555a;
+	
+	--bright-textcolor : #e6eaee;
+	--tame-textcolor : #d5becd;
+	--medium-textcolor : #83918b;
+
+}
+
+
+
+
+/* General --- */
+
+/* Make tooltip nice and centered */
+#tooltip {
+	margin-top : 5px;
+	margin-bottom : 5px;
+}
+
+/* Make title beautiful */
+h1 {
+	font-family : Trebuchet MS, Arial Black, Arial;
+	margin-left : 30px;
+
+	background-color : #161b22;
+}
+
+body {
+	color : var(--bright-textcolor);
+	background-color : var(--dark-color2);
+}
+
+a {
+	color : var(--medium-textcolor);
+}
+
+#logo {
+	margin-top : -8px;
+	display:inline-block;
+}
+
+/* Shiny specific tags --- */
+
+/* Main */
+.container-fluid {
+	background-color : var(--dark-color2);
+}
+
+/* Title */
+.app-title {
+	background-color : #161b22;
+	margin-top : -20px;
+	color : #ffffff;
+}
+
+/* Tabs */
+.well {
+	background-color : var(--medium-color); 
+	color : var(--bright-textcolor);
+	border : 0;
+}
+
+/* Number Input */
+.shiny-bound-input {
+	background-color : var(--dark-color2);
+	color : var(--tame-textcolor); 
+	border : 0;
+}
+
+/* Theme Button */
+.themeButton {
+	height : 20px;
+	width : 20px;
+	border : 3px solid;
+	border-color : var(--dark-color1);
+	border-radius : 3px;
+}
+
+/* Prototab */
+
+.protobutton {
+	width: calc(100% + 20px);
+	border-radius : 3px;
+	text-align : left;
+	margin-left : -10px;
+	border-bottom : 3px solid;
+	border-color : var(--dark-color1);
+}
+
+.prototab {
+  opacity: 1;
+  height:100%;
+  transition: all 0.2s;
+}
+
+.prototab.prototabhidden {
+  opacity: 0;
+  height: 0px;
+  visibility:hidden;
+}
+
+/* Loading */
+
+#loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 33%;
+    width: 67%;
+    height: 100%;
+    z-index: 1000;
+	pointer-events: none;
+}
+#loader {
+    display: block;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: var(--tame-textcolor);
+    -webkit-animation: spin 2s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+    animation: spin 2s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */
+}
+
+#loader:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: var(--dark-color);
+    -webkit-animation: spin 3s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      animation: spin 3s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */
+}
+
+#loader:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: var(--medium-color);
+    -webkit-animation: spin 1.5s linear infinite; /* Chrome, Opera 15+, Safari 5+ */
+      animation: spin 1.5s linear infinite; /* Chrome, Firefox 16+, IE 10+, Opera */
+}
+
+@-webkit-keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);  /* IE 9 */
+        transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+    100% {
+        -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(360deg);  /* IE 9 */
+        transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+}
+@keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);  /* IE 9 */
+        transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+    100% {
+        -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(360deg);  /* IE 9 */
+        transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+}
