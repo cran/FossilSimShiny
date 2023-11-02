@@ -12,9 +12,9 @@
 
 <meta name="author" content="Titouan Chambe" />
 
-<meta name="date" content="2022-05-25" />
+<meta name="date" content="2023-11-02" />
 
-<title>Hosting ‘FossilShinyApp’ on a Web Server</title>
+<title>Hosting ‘FossilSimShiny’ on a Web Server</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -31,23 +31,23 @@ document.addEventListener('DOMContentLoaded', function(e) {
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -65,55 +65,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -122,13 +121,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -332,10 +338,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Hosting ‘FossilShinyApp’ on a Web
+<h1 class="title toc-ignore">Hosting ‘FossilSimShiny’ on a Web
 Server</h1>
 <h4 class="author">Titouan Chambe</h4>
-<h4 class="date">2022-05-25</h4>
+<h4 class="date">2023-11-02</h4>
 
 
 
@@ -354,16 +360,15 @@ matter.<br />
 <li><a href="#dependencies">Dependencies</a>
 <ul>
 <li><a href="#r">R</a></li>
-<li><a href="#dependencies-for-building-shiny-server-from-source">Dependencies
-for building shiny server from source</a></li>
-<li>[R packages we need]</li>
+<li><a href="#dependencies-for-building-a-shiny-server-from-source">Dependencies
+for building a Shiny server from source</a></li>
+<li><a href="#r-packages-we-need">R packages we need</a></li>
 </ul></li>
-<li>[Installing R shiny server]</li>
+<li><a href="#installing-shiny-server">Installing Shiny Server</a></li>
 <li><a href="#putting-the-app-on-the-server">Putting the app on the
 server</a></li>
 <li><a href="#firewall-tweaks">Firewall tweaks</a></li>
-<li><a href="#starting-the-shiny-server">Starting the shiny
-server</a></li>
+<li><a href="#starting-shiny-server">Starting Shiny Server</a></li>
 </ul>
 </div>
 <div id="preface" class="section level2">
@@ -390,7 +395,7 @@ recent version of <code>R</code> as to fully support the
 First open the file at <code>/etc/apt/sources.list</code> to add the
 <code>R</code> <code>PPA</code> to your sources list:<br />
 </p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> /etc/apt/sources.list</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">nano</span> /etc/apt/sources.list</span></code></pre></div>
 <p>Add the line
 <code>deb http://cloud.r-project.org/bin/linux/debian bullseye-cran40/</code>
 as shown below to add the <code>PPA</code>.<br />
@@ -399,30 +404,30 @@ If you are using a different <code>distro</code>, you can use <a href="https://C
 <code>PPA</code>.<br />
 <br />
 Your source file should look like this:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># deb http://mirrors.online.net/debian bullseye main</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">deb</span> http://mirrors.online.net/debian bullseye main non-free contrib</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">deb-src</span> http://mirrors.online.net/debian bullseye main non-free contrib</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">deb</span> http://security.debian.org/debian-security bullseye-security main contrib n<span class="op">&gt;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">deb-src</span> http://security.debian.org/debian-security bullseye-security main contr<span class="op">&gt;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># R 4.2.0</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">deb</span> http://cloud.r-project.org/bin/linux/debian bullseye-cran40/</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># deb http://mirrors.online.net/debian bullseye main</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="ex">deb</span> http://mirrors.online.net/debian bullseye main non-free contrib</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="ex">deb-src</span> http://mirrors.online.net/debian bullseye main non-free contrib</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="ex">deb</span> http://security.debian.org/debian-security bullseye-security main contrib n<span class="op">&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="ex">deb-src</span> http://security.debian.org/debian-security bullseye-security main contr<span class="op">&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co"># R 4.2.0</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="ex">deb</span> http://cloud.r-project.org/bin/linux/debian bullseye-cran40/</span></code></pre></div>
 <p>Then press <code>CTRL+X</code> to quit and <code>Y</code> to
 save.<br />
 <br />
 Finally, you can install <code>R</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apt-get</span> update</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">apt-get</span> install r-base r-base-dev</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">apt-get</span> update</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">apt-get</span> install r-base r-base-dev</span></code></pre></div>
 <p>You can verify your <code>R</code> version by using the
 <code>R</code> command.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> R</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> version 4.2.0 <span class="er">(</span><span class="ex">2022-04-22</span><span class="kw">)</span> <span class="ex">--</span> <span class="st">&quot;Vigorous Calisthenics&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="ex">$</span> R</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="ex">R</span> version 4.2.0 <span class="er">(</span><span class="ex">2022-04-22</span><span class="kw">)</span> <span class="ex">--</span> <span class="st">&quot;Vigorous Calisthenics&quot;</span></span></code></pre></div>
 </div>
-<div id="dependencies-for-building-shiny-server-from-source" class="section level3">
-<h3>Dependencies for building shiny server from source</h3>
+<div id="dependencies-for-building-a-shiny-server-from-source" class="section level3">
+<h3>Dependencies for building a Shiny server from source</h3>
 <p>These are the dependencies you’ll need to build shiny server.
 Depending on your distribution they may already be pre-installed.<br />
 <br />
@@ -454,82 +459,82 @@ guide with a</em><code>Debian 9&lt;</code><em>server.</em></p>
 <p>Use <code>sudo apt-get install git</code>.</p>
 </div>
 <div id="r-packages-we-need" class="section level3">
-<h3><code>R</code> packages we need</h3>
+<h3>R packages we need</h3>
 <p>Any <code>R</code> packages used by the app needs to be installed for
 all users. This means we need to install both the shiny package and the
 <code>FossilSim</code> package for all users.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> su <span class="at">-</span> <span class="at">-c</span> <span class="st">&quot;R -e </span><span class="dt">\&quot;</span><span class="st">install.packages(&#39;shiny&#39;, repos=&#39;https://cran.rstudio.com/&#39;)</span><span class="dt">\&quot;</span><span class="st">&quot;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> su <span class="at">-</span> <span class="at">-c</span> <span class="st">&quot;R -e </span><span class="dt">\&quot;</span><span class="st">install.packages(&#39;FossilSim&#39;)</span><span class="dt">\&quot;</span><span class="st">&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> su <span class="at">-</span> <span class="at">-c</span> <span class="st">&quot;R -e </span><span class="dt">\&quot;</span><span class="st">install.packages(&#39;shiny&#39;, repos=&#39;https://cran.rstudio.com/&#39;)</span><span class="dt">\&quot;</span><span class="st">&quot;</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> su <span class="at">-</span> <span class="at">-c</span> <span class="st">&quot;R -e </span><span class="dt">\&quot;</span><span class="st">install.packages(&#39;FossilSim&#39;)</span><span class="dt">\&quot;</span><span class="st">&quot;</span></span></code></pre></div>
 </div>
 </div>
-<div id="installing-r-shiny-server" class="section level2">
-<h2>Installing <code>R</code> shiny server</h2>
+<div id="installing-shiny-server" class="section level2">
+<h2>Installing Shiny Server</h2>
 <p><strong>Note:</strong> most of this part is referenced from
 <a href="https://github.com/rstudio/shiny-server/wiki/Building-Shiny-Server-from-Source">here</a>.<br />
 <br />
 Once all of the prerequisites have been satisfied, you can use the
 following commands to download and install Shiny Server.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clone the repository from GitHub</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/rstudio/shiny-server.git</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get into a temporary directory in which we&#39;ll build the project</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> shiny-server</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> tmp</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> tmp</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Install our private copy of Node.js</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="ex">../external/node/install-node.sh</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the bin directory to the path so we can reference node</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="va">DIR</span><span class="op">=</span><span class="kw">`</span><span class="bu">pwd</span><span class="kw">`</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="va">PATH</span><span class="op">=</span><span class="va">$DIR</span>/../bin:<span class="va">$PATH</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Use cmake to prepare the make step. Modify the &quot;--DCMAKE_INSTALL_PREFIX&quot;</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># if you wish the install the software at a different location.</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">-DCMAKE_INSTALL_PREFIX</span><span class="op">=</span>/usr/local ../</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Get an error here? Check the &quot;How do I set the cmake Python version?&quot; question below</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Compile native code and install npm dependencies</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> ../build</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="bu">cd</span> .. <span class="kw">&amp;&amp;</span> <span class="ex">./bin/npm</span> install<span class="kw">)</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the software at the predefined location</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> make install</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Install default config file</span></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/shiny-server</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> cp ../config/default.config /etc/shiny-server/shiny-server.conf</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Place a shortcut to the shiny-server executable in /usr/bin</span></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /usr/local/shiny-server/bin/shiny-server /usr/bin/shiny-server</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Create shiny user. On some systems, you may need to specify the full path to &#39;useradd&#39;</span></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> useradd <span class="at">-r</span> <span class="at">-m</span> shiny</span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Create log, config, and application directories</span></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /var/log/shiny-server</span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /srv/shiny-server</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /var/lib/shiny-server</span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chown shiny /var/log/shiny-server</span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/shiny-server</span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="co"># I added this command</span></span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chown shiny:shiny /var/lib/shiny-server/</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Clone the repository from GitHub</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/rstudio/shiny-server.git</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co"># Get into a temporary directory in which we&#39;ll build the project</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="bu">cd</span> shiny-server</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="fu">mkdir</span> tmp</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="bu">cd</span> tmp</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co"># Install our private copy of Node.js</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="ex">../external/node/install-node.sh</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co"># Add the bin directory to the path so we can reference node</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="va">DIR</span><span class="op">=</span><span class="kw">`</span><span class="bu">pwd</span><span class="kw">`</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="va">PATH</span><span class="op">=</span><span class="va">$DIR</span>/../bin:<span class="va">$PATH</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co"># Use cmake to prepare the make step. Modify the &quot;--DCMAKE_INSTALL_PREFIX&quot;</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co"># if you wish the install the software at a different location.</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="fu">cmake</span> <span class="at">-DCMAKE_INSTALL_PREFIX</span><span class="op">=</span>/usr/local ../</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co"># Get an error here? Check the &quot;How do I set the cmake Python version?&quot; question below</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co"># Compile native code and install npm dependencies</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="fu">make</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="fu">mkdir</span> ../build</span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="kw">(</span><span class="bu">cd</span> .. <span class="kw">&amp;&amp;</span> <span class="ex">./bin/npm</span> install<span class="kw">)</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co"># Install the software at the predefined location</span></span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="fu">sudo</span> make install</span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co"># Install default config file</span></span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/shiny-server</span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a><span class="fu">sudo</span> cp ../config/default.config /etc/shiny-server/shiny-server.conf</span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a><span class="co"># Place a shortcut to the shiny-server executable in /usr/bin</span></span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /usr/local/shiny-server/bin/shiny-server /usr/bin/shiny-server</span>
+<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a><span class="co"># Create shiny user. On some systems, you may need to specify the full path to &#39;useradd&#39;</span></span>
+<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="fu">sudo</span> useradd <span class="at">-r</span> <span class="at">-m</span> shiny</span>
+<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a><span class="co"># Create log, config, and application directories</span></span>
+<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /var/log/shiny-server</span>
+<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /srv/shiny-server</span>
+<span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /var/lib/shiny-server</span>
+<span id="cb6-43"><a href="#cb6-43" tabindex="-1"></a><span class="fu">sudo</span> chown shiny /var/log/shiny-server</span>
+<span id="cb6-44"><a href="#cb6-44" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/shiny-server</span>
+<span id="cb6-45"><a href="#cb6-45" tabindex="-1"></a></span>
+<span id="cb6-46"><a href="#cb6-46" tabindex="-1"></a><span class="co"># I added this command</span></span>
+<span id="cb6-47"><a href="#cb6-47" tabindex="-1"></a><span class="fu">sudo</span> chown shiny:shiny /var/lib/shiny-server/</span></code></pre></div>
 </div>
 <div id="putting-the-app-on-the-server" class="section level2">
 <h2>Putting the app on the server</h2>
 <p>The <code>/srv/shiny-server</code> directory is where we house our
 apps.</br> I recommend creating a new directory:
-<code>/srv/shiny-server/FossilShinyApp/</code>.</p>
+<code>/srv/shiny-server/FossilSimShinyApp/</code>.</p>
 <p>Then, you can grab the <code>app.R</code> file, the
 <code>/www/</code> folder and the <code>/R/</code> folder from
-<a href="https://github.com/fossilsim/shiny/tree/master/inst/shinyApp">here</a>
-and copy them to <code>/srv/shiny-server/FossilShinyApp/</code>.</p>
+<a href="https://github.com/fossilsim/FossilSimShiny/tree/master/inst/shinyApp">here</a>
+and copy them to <code>/srv/shiny-server/FossilSimShinyApp/</code>.</p>
 </div>
 <div id="firewall-tweaks" class="section level2">
 <h2>Firewall tweaks</h2>
-<p>By default, shiny server is set to use port
+<p>By default, Shiny Server is set to use port
 <strong>3838</strong>.</br> <em>Author’s note: I have no idea why they
 chose this port.</em><br />
 <br />
@@ -540,28 +545,28 @@ If you are using uncomplicated firewall, you can run the command:
 <p>Furthermore you can change the port used in
 <code>/etc/shiny-server/shiny-server.conf</code>.</p>
 </div>
-<div id="starting-the-shiny-server" class="section level2">
-<h2>Starting the shiny server</h2>
+<div id="starting-shiny-server" class="section level2">
+<h2>Starting Shiny Server</h2>
 <p>As you probably noticed, during the installation, we created a new
 user called shiny. We’ll use this user to start and stop our shiny
 operations.</p>
 <p>Let’s start our shiny server. First, log in as shiny.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">su</span> shiny</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">su</span> shiny</span></code></pre></div>
 <p>If you’ve followed everything correctly, you should be able to start
 the shiny server by typing:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">shiny-server</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[2022-05-10T13:56:44.320]</span> [INFO] shiny-server <span class="at">-</span> Shiny Server v1.5.19.0 <span class="er">(</span><span class="ex">Node.js</span> v16.14.0<span class="kw">)</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="ex">[2022-05-10T13:56:44.324]</span> [INFO] shiny-server <span class="at">-</span> Using config file <span class="st">&quot;/etc/shiny-server/shiny-server.conf&quot;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="ex">[2022-05-10T13:56:44.435]</span> [INFO] shiny-server <span class="at">-</span> Starting listener on http://[::]:3838</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">shiny-server</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="ex">[2022-05-10T13:56:44.320]</span> <span class="pp">[</span><span class="ss">INFO</span><span class="pp">]</span> shiny-server <span class="at">-</span> Shiny Server v1.5.19.0 <span class="er">(</span><span class="ex">Node.js</span> v16.14.0<span class="kw">)</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="ex">[2022-05-10T13:56:44.324]</span> <span class="pp">[</span><span class="ss">INFO</span><span class="pp">]</span> shiny-server <span class="at">-</span> Using config file <span class="st">&quot;/etc/shiny-server/shiny-server.conf&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="ex">[2022-05-10T13:56:44.435]</span> <span class="pp">[</span><span class="ss">INFO</span><span class="pp">]</span> shiny-server <span class="at">-</span> Starting listener on http://<span class="pp">[</span><span class="ss">::</span><span class="pp">]</span>:3838</span></code></pre></div>
 <p>You should then be able to access your app using any web browser and
 going to the following web address:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">http://</span> your ip address :3838/FossilSimShiny/</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="ex">http://</span> your ip address :3838/FossilSimShiny/</span></code></pre></div>
 </div>
 <div id="further-reading" class="section level2">
 <h2>Further Reading</h2>
 <ul>
-<li><a href="https://docs.rstudio.com/shiny-server/">Administrative
-guide to shiny server</a></li>
+<li><a href="https://docs.posit.co/shiny-server/">Administrative guide
+to shiny server</a></li>
 </ul>
 <p><br />
 <br />
