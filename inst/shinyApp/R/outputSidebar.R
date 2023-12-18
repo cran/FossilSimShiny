@@ -50,7 +50,7 @@ outputSidebar <- function(id) {
                
                # Set size of output panel 
                #todo -- make it react to different screen resolution
-               left = "33%", top= "120px", width = "67%"
+               left = "33%", top= "120px", bottom = "100px", width = "67%"
     )
   )
 }
@@ -84,9 +84,10 @@ outputSidebarServer <- function(id, v, k) {
         
         # Show fossil taxonomy
         if(v$current$showtaxonomy) {
-          validate(need(!is.null(v$current$tax), "No taxomony..."))
+          validate(need(!is.null(v$current$tax), "Show taxonomy is selected but no taxonomy was found"))
         }
         
+        par(oma = c(8, 0, 0, 0))
         # View 1) tree : display tree with empty fossils
         if (input[[paste0(v$currentTab, "dropview")]] == "tree"){
           plot(FossilSim::fossils(),
@@ -116,8 +117,9 @@ outputSidebarServer <- function(id, v, k) {
         if (input[[paste0(v$currentTab, "dropview")]] == "tree+fossils") {
           validate(need(!is.null(v$current$fossils), "No fossils found, please simulate fossils."))
           
-          show.depth = (v$current$`enviro-dep-showsamplingproxy`) && (!is.null(v$current$fossilModelName) && v$current$fossilModelName == "Holland")
-          strata = if(v$current$showstrata && (!is.null(v$current$fossilModelName) && v$current$fossilModelName == "Holland")) v$current$strata else 1
+          is.enviro.model = !is.null(v$current$fossilModelName) && v$current$fossilModelName == "Holland"
+          show.depth = (v$current$`enviro-dep-showsamplingproxy` && is.enviro.model)
+          strata = if((v$current$showstrata || v$current$`enviro-dep-showsamplingproxy`) && is.enviro.model) v$current$strata else 1
           int.ages = if(v$current$showstrata && (!is.null(v$current$fossilModelName) && v$current$fossilModelName == "Non-Uniform")) v$current$int.ages else NULL
           
           plot(v$current$fossils,
