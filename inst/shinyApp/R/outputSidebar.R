@@ -39,9 +39,11 @@ outputSidebar <- function(id) {
                                                     label="", choices = c("tree", "taxonomy", "tree+fossils")),
                                         top = "60px", right = "5%", width = "15%", height="5vh"),
                              
+                             textOutput(outputId = ns(paste0(initialTabName, "msg"))),
+                             
                              # Main plot output ---
                              plotOutput(outputId = ns(paste0(initialTabName, "tree")),
-                                        width = "100%", height = "85vh"),
+                                        width = "100%", height = "80vh"),
                            ),
                            
                            # New tab button ---
@@ -80,7 +82,7 @@ outputSidebarServer <- function(id, v, k) {
         validate(need(is.null(v$current$error) || !v$current$error, v$current$errorMsg))
         
         # Check if there is a tree
-        if(is.null(v$current$tree)) return()
+        if(is.null(v$current$tree)) return(NA)
         
         # Show fossil taxonomy
         if(v$current$showtaxonomy) {
@@ -150,6 +152,12 @@ outputSidebarServer <- function(id, v, k) {
       
       # for every tab
       for (k in keys) {
+        output[[paste0(k,"msg")]] <- renderText({
+          msg = if(!is.null(v$current$status) && v$current$status$timing > 0) paste("Simulation time:", round(v$current$status$timing, digits = 3), "seconds") else ""
+          if(!is.null(v$current$status) && v$current$status$msg != "") msg = paste(msg, "-", v$current$status$msg)
+          msg
+        })
+        
         # update the tab's plot if input values have changed
         # in reality only $current plot will ever be changed
         output[[paste0(k,"tree")]] <- renderPlot({ makePlots() })
@@ -211,8 +219,10 @@ outputSidebarServer <- function(id, v, k) {
                                                     label="", choices = c("tree", "taxonomy", "tree+fossils")),
                                         top = "60px", right = "5%", width = "15%", height="5vh"),
                              
+                             textOutput(outputId = ns(paste0(v$currentTab, "msg"))),
+                             
                              plotOutput(outputId = ns(paste0(v$currentTab, "tree")),
-                                        width = "100%", height = "85vh")), target = "+", position="before")
+                                        width = "100%", height = "80vh")), target = "+", position="before")
           
           # If all of the tab keys have been used, we delete the "+" tab
           if (v$createdKeys[length(v$createdKeys)] == keys[length(keys)]) {
@@ -233,13 +243,14 @@ outputSidebarServer <- function(id, v, k) {
       
       output$saveas <- downloadHandler(
         filename = function() {
-          if(input$imgformat == "PNG") paste0("plot-", Sys.Date(), ".png")
-          else paste0("plot-", Sys.Date(), ".pdf")
+          if(input$imgformat == "PNG") paste0("plot_", format(Sys.time(), "%Y-%m-%d_%Hh%Mm%Ss"), ".png")
+          else paste0("plot_", format(Sys.time(), "%Y-%m-%d_%Hh%Mm%Ss"), ".pdf")
         },
         content = function(file) {
           if(input$imgformat == "PNG") png(file, width = 2500, height = 1500)
           else pdf(file, width = 20, height = 15)
-          replayPlot(makePlots())
+          plot = makePlots()
+          if(length(plot) > 1 || !is.na(plot)) replayPlot(plot)
           dev.off()
         })
     }

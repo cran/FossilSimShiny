@@ -85,6 +85,7 @@ inputSidebarUI <- function(id) {
                             max = 10 ),
                
                actionButton(ns("simtax"), "Simulate taxonomy"),
+               actionButton(ns("cleartax"), "Clear taxonomy"),
                
       ),
       # ---<
@@ -118,11 +119,14 @@ inputSidebarUI <- function(id) {
                            # ii. Non-uniform Distribution --
                            tabPanel(p("Time-dependent", id = ns("non-uniform")),
                                     HTML("</br>"),
-                                    sliderInput(inputId = ns("non-uniform-int"),
-                                                label = "Number of intervals",
-                                                value = 1,
-                                                min = 0,
-                                                max = 10 ),
+                                    selectInput(ns("nonUniformType"), label = "Interval type", choices = c("random", "even", "user-defined")),
+                                    
+                                    conditionalPanel("input.nonUniformType == 'random' || input.nonUniformType == 'even'",
+                                                     sliderInput(inputId = ns("non-uniform-int"), label = "Number of intervals", value = 1, min = 0, max = 10 ), 
+                                                     ns = ns),
+                                    conditionalPanel("input.nonUniformType == 'user-defined'",
+                                                     textInput(inputId = ns("non-uniform-bounds"), label = "Interval bounds (delimited by /)"), 
+                                                     ns = ns),
                                     
                                     numericInput(inputId = ns("non-uniform-meanrate"),
                                                  label = "Mean sampling rate",
@@ -172,12 +176,12 @@ inputSidebarUI <- function(id) {
                                     HTML("</br>"),
                                     numericInput(inputId = ns("lineage-dep-LNrate"),
                                                  label = "Mean rate",
-                                                 value = 2,
-                                                 min = 1,
-                                                 max = 5 ),
+                                                 value = 0.5,
+                                                 min = -10,
+                                                 max = 3 ),
                                     numericInput(inputId = ns("lineage-dep-LNsd"),
                                                  label = "Standard deviation",
-                                                 value = 1,
+                                                 value = 0.7,
                                                  min = 0,
                                                  max = 5 ),
                            ),
@@ -187,7 +191,7 @@ inputSidebarUI <- function(id) {
                ),
                
                actionButton(ns("simfossils"), "Simulate fossils"),
-               
+               actionButton(ns("clearfossils"), "Clear fossils"),
       ),
       # ---<
       HTML("</br> </br> </br> </br> </br> </br>"),
@@ -200,13 +204,13 @@ inputSidebarUI <- function(id) {
                HTML("</br>"),
                
                checkboxInput(inputId = ns("showtree"), "Show tree", value = TRUE),
-               checkboxInput(inputId = ns("showtaxonomy"), "Show taxonomy", value = FALSE),
-               checkboxInput(inputId = ns("showfossils"), "Show all occurrences", value = TRUE),
-               checkboxInput(inputId = ns("showranges"), "Show ranges", value = FALSE),
-               checkboxInput(inputId = ns("showstrata"), "Show strata", value = FALSE),
+               checkboxInput(inputId = ns("showtaxonomy"), "Show fossil taxonomy - (requires simulated taxonomy and fossils)", value = FALSE),
+               checkboxInput(inputId = ns("showfossils"), "Show all occurrences - (requires simulated fossils)", value = TRUE),
+               checkboxInput(inputId = ns("showranges"), "Show ranges - (requires simulated fossils)", value = FALSE),
+               checkboxInput(inputId = ns("showstrata"), "Show strata used in simulating fossils", value = FALSE),
                checkboxInput(inputId = ns("showtips"), "Show tip labels", value = FALSE),
                checkboxInput(inputId = ns("reconstructed"), "Show reconstructed tree", value = FALSE),
-               checkboxInput(inputId = ns("enviro-dep-showsamplingproxy"), "Show depth used in sampling", value = FALSE),
+               checkboxInput(inputId = ns("enviro-dep-showsamplingproxy"), "Show depth (requires fossils under a depth-dependent model)", value = FALSE),
                
       ),
       # ---<
@@ -258,10 +262,13 @@ inputSidebarServer <- function(id, v) {
         }
         validate(need(!v$current$error, v$current$errorMsg))
         
+        initial.time = Sys.time()
         repeat {
           v$current$tree = try(TreeSim::sim.bd.taxa(input$tips, 1, input$lambda, input$mu)[[1]])
           if(class(v$current$tree) != "try-error") break
         }
+        v$current$status = list(timing = Sys.time() - initial.time, msg = "")
+        
         v$current$fossils = FossilSim::fossils()
         v$current$tax = NULL # set taxonomy to NULL to avoid issues as old taxonomy will very likely not line up with a new tree
         
@@ -285,6 +292,8 @@ inputSidebarServer <- function(id, v) {
           v$current$error = TRUE
           v$current$errorMsg = "Could not read tree, please check the Newick string."
         }
+        v$current$status = list(timing = -1, msg = "")
+        
         v$current$fossils = FossilSim::fossils()
         v$current$tax = NULL # set taxonomy to NULL to avoid issues as old taxonomy will very likely not line up with a new tree
         validate(need(!v$current$error, v$current$errorMsg))
@@ -301,13 +310,25 @@ inputSidebarServer <- function(id, v) {
         }
         validate(need(!v$current$error, v$current$errorMsg))
         
+        initial.time = Sys.time()
         v$current$tax = FossilSim::sim.taxonomy(tree = v$current$tree, input$taxonomybeta, input$taxonomylambda)
         if(!attr(v$current$fossils, "from.taxonomy")) v$current$fossils = FossilSim::reconcile.fossils.taxonomy(v$current$fossils, v$current$tax)
         else v$current$fossils = FossilSim::fossils()
         
+        tmp = v$current$tax[, c("sp", "mode")]
+        event_counts = table(tmp[!duplicated(tmp),]$mode)
+        v$current$status = list(timing = Sys.time() - initial.time, 
+                                msg = paste("Simulated:", event_counts["a"], "anagenetic events,", event_counts["b"], "budding events and", event_counts["s"]/2, "bifurcating events"))
+        
         session$sendCustomMessage("loading", FALSE)
       })
       
+      # Clear taxonomy
+      observeEvent(input$cleartax, {
+        v$current$tax = NULL
+      })
+      
+      # Check that fossilization rates are not too high
       validateRates = function(rates) {
         if(any(rates > 10)) {
           v$current$error = TRUE
@@ -326,6 +347,7 @@ inputSidebarServer <- function(id, v) {
         validate(need(!v$current$error, v$current$errorMsg))
         
         # Here we check which fossil sim tab is selected and simulate fossils
+        initial.time = Sys.time()
         
         # i. Uniform Distribution --
         if(input$tabset == listOfTabs$unif) {
@@ -337,8 +359,18 @@ inputSidebarServer <- function(id, v) {
         # ii. Non-Uniform Distribution --
         else if (input$tabset == listOfTabs$timedep) {
           max.age = FossilSim::tree.max(v$current$tree)
-          v$current$int.ages = c(0, sort(runif(input$`non-uniform-int` - 1, min = 0, max = max.age)), max.age)
-          rates = rlnorm(input$`non-uniform-int`, log(input$`non-uniform-meanrate`), sqrt(input$`non-uniform-variance`))
+          
+          if(input$nonUniformType == "random") {
+            v$current$int.ages = c(0, sort(runif(input$`non-uniform-int` - 1, min = 0, max = max.age)), max.age)
+          } else if(input$nonUniformType == "even") {
+            v$current$int.ages = seq(0, max.age, length.out = input$`non-uniform-int` + 1)
+          } else if(input$nonUniformType == "user-defined") {
+            v$current$int.ages = sort(as.numeric(strsplit(input$`non-uniform-bounds`, "/")[[1]]))
+            if(v$current$int.ages[1] > 0) v$current$int.ages = c(0, v$current$int.ages)
+            if(v$current$int.ages[length(v$current$int.ages)] < max.age) v$current$int.ages = c(v$current$int.ages, max.age)
+          }
+            
+          rates = rlnorm(length(v$current$int.ages) - 1, log(input$`non-uniform-meanrate`), sqrt(input$`non-uniform-variance`))
           validateRates(rates)
           v$current$fossilModelName = "Non-Uniform"
           v$current$fossils = FossilSim::sim.fossils.intervals(v$current$tree, interval.ages = v$current$int.ages, rates = rates)
@@ -369,12 +401,21 @@ inputSidebarServer <- function(id, v) {
         }
         # --<
         
+        v$current$status = list(timing = Sys.time() - initial.time, 
+                                msg = paste("Simulated:", nrow(v$current$fossils), "fossil samples"))
+        
         session$sendCustomMessage("loading", FALSE)
         
       })
       
+      # Clear fossils
+      observeEvent(input$clearfossils, {
+        v$current$fossils = FossilSim::fossils()
+      })
+      
+      # download simulated data as RData
       output$dldata <- downloadHandler(
-        filename = function() {paste0("data-", Sys.Date(), ".RData")},
+        filename = function() {paste0("data-", format(Sys.time(), "%Y-%m-%d_%Hh%Mm%Ss"), ".RData")},
         content = function(file) {
           data = list(tree = v$current$tree, taxonomy = v$current$tax, fossils = v$current$fossils)
           save(data, file = file)

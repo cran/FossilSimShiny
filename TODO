@@ -8,5 +8,28 @@ Feature requests (feedback from Morlon team 13/12/2023)
 - colour ranges are too thin when tree is big (25 tips + turnover 0.8)
 - time-dependent rates - add dropdown for different distro options ?
 - add better description of depth-dependent model (could do a "help" popup for more details on the models ?)
-- appearance buttons should not trigger automatic changes to the view - either explicit changes OR remove altogether
+- appearance buttons should not trigger automatic changes to the view - either explicit changes OR remove altogether => add better controls for dropdown explicitly tied to simulation not to the objects
 - views menu might be better as radio buttons than dropdown
+
+Reviewer comments 
+- do a better job of linking plot options to the selected plot / simulated data => to discuss - unfortunately, may need a rewrite of the architecture for that (aka porting plot options to the other side of the UI // or just getting rid of the whole separation altogether erk)
+- error messages to add on top of the plot not instead of the plot => should be doable (?)
+- sampling depth chart overlaps with tooltip area => to discuss, I think we need to reevaluate how the tooltip area works because atm it gives different results based on screen size and other details, probably need to make it a separate area in the R code but not sure how this would work with the javascript
+- dark mode doesn't work for changing the colour of the plot area => May need to get Titouan to help on that one
+- change tip limit when app is run locally vs on a server => to discuss, I think auto-detection is tricky but we could use a config file to specify limits (thus the user could change them if they want), I need to look further into this
+see https://forum.posit.co/t/is-there-a-way-to-detect-if-an-app-is-running-on-shinyapps-io/20666 for autodetection (shinyapps only though)
+- tooltip is not visible enough, maybe make it pop up at the cursor (check prompter package suggested by reviewer) => see later
+
+Reviewer comments (DONE)
+- save image button breaks when no plot exists
+- filename for saving not specific enough => changed to date + time
+- default lineage-dependent settings often break, better defaults needed
+- add buttons to clear fossils or taxonomy without restarting the whole thing
+- more control over time intervals would be nice => added evenly-spread intervals and user-specified intervals
+- add timer for simulations
+- add counts for simulations - # of fossils, # of events of each type (budding, anagenetic etc)
+- default tooltip text added (potentially as work-around before a better fix)
+- added description of requirements for plotting options as work-around before a better fix
+- taxonomy colours change everytime the plot is reloaded
+- taxonomy colours not colourblind friendly
+- timescale & sampling depth too light, font too small
